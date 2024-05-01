@@ -4,33 +4,49 @@ class Tree:
     
     def build(self, sexpr):
         stack = []
-        parent = None
+        nexpr = ""
         
+        # change sexpr into postfix form
         for e in sexpr:
             if e == ")":
                 while stack[-1] != "(":
-                    stack.pop()
-                stack.pop()
+                    nexpr += stack.pop()
+                nexpr += stack.pop()
             
             else:
+                # sibling sign
                 if e.isalpha():
-                    new = Tree.TreeNode(e)
+                    if literal.isalpha():
+                        stack.append("+")
                     
-                    if stack[-1] == "(":
-                        if self.root is None:
-                            self.root = new
-                            parent = self.root
-                            stack.append(e)
-                            continue
-                        
-                        parent.left_child = new
-                    else:
-                        parent.right_sibling = new
-                    
-                    parent = new
+                    nexpr += e
+                else:
+                    stack.append(e)
                 
-                stack.append(e)
-    
+                literal = e
+        
+        while len(stack) > 0:
+            nexpr += stack.pop()
+        
+        # 
+        for e in nexpr:
+            if e.isalpha():
+                stack.append(Tree.TreeNode(e))
+            else:
+                if len(stack) <= 1:
+                    self.root = stack.pop()
+                    break
+                
+                c = stack.pop()
+                p = stack.pop()
+                
+                if e == "+":
+                    p.right_sibling = c
+                elif e == "(":
+                    p.left_child = c
+                
+                stack.append(p)
+
     class TreeNode:
         def __init__(self, data):
             self.data = data
@@ -41,7 +57,7 @@ class Tree:
             return f"{self.data}"
 
 if __name__ == "__main__":
-    expr = "( A ( B ( E ( K L "
+    expr = "( A ( B ( E ( K L ) F ) C ( G ) D ( H ( M ) I J ) ) )"
     tree = Tree()
     tree.build(expr.split())
     
@@ -51,13 +67,30 @@ if __name__ == "__main__":
     assert a
     b = a.left_child
     print(b)
-    
+    c = b.right_sibling
+    print(c)
+    d = c.right_sibling
+    print(d)
     
     e = b.left_child
     print(e)
+    f = e.right_sibling
+    print(f)
     
+    g = c.left_child
+    print(g)
+    
+    h = d.left_child
+    print(h)
+    i = h.right_sibling
+    print(i)
+    j = i.right_sibling
+    print(j)
     
     k = e.left_child
     print(k)
     l = k.right_sibling
     print(l)
+    
+    m = h.left_child
+    print(m)
