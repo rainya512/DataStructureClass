@@ -28,7 +28,7 @@ class Tree:
         while len(stack) > 0:
             nexpr += stack.pop()
         
-        # 
+        # logic for build tree (use postfix calculation)
         for e in nexpr:
             if e.isalpha():
                 stack.append(Tree.TreeNode(e))
