@@ -34,7 +34,6 @@ class Tree:
                 stack.append(Tree.TreeNode(e))
             else:
                 if len(stack) <= 1:
-                    self.root = stack.pop()
                     break
                 
                 c = stack.pop()
@@ -46,6 +45,8 @@ class Tree:
                     p.left_child = c
                 
                 stack.append(p)
+        
+        self.root = stack.pop()
 
     class TreeNode:
         def __init__(self, data):
