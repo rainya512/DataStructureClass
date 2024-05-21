@@ -66,20 +66,38 @@ class TreeBinary:
     def traverse_postorder(self):
         ret = []
         stack = []
+        tmp = []
         
         root = self.root
-        stack.append(root)
         
-        while len(stack) != 0:
-            root = stack.pop()
-            ret.append(root)
+        while True:
+            while root:
+                stack.append(root)
+                stack.append(root)
+                root = root.left_child
             
+            if len(stack) == 0:
+                break
+            
+            root = stack.pop()
+            if len(stack) != 0 and stack[-1] == root:
+                root = root.right_child
+            else:
+                ret.append(root)
+                root = None
+            
+        return ret
+            
+        '''while len(stack) != 0:
+            root = stack.pop()
+            tmp.append(root)
             if root.left_child is not None:
                 stack.append(root.left_child)
             if root.right_child is not None:
                 stack.append(root.right_child)
         
-        ret.reverse()
+        while len(tmp) != 0:
+            ret.append(tmp.pop())'''
         
         '''
         # use recursive
@@ -144,9 +162,9 @@ if __name__ == "__main__":
     assert root
     
     tree = TreeBinary(root)
-    actions = tree.traverse_inorder()
-    print(actions)
-    actions = tree.traverse_preorder()
-    print(actions)
+    #actions = tree.traverse_inorder()
+    #print(actions)
+    #actions = tree.traverse_preorder()
+    #print(actions)
     actions = tree.traverse_postorder()
     print(actions)
