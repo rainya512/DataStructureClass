@@ -47,6 +47,35 @@ class Tree:
                 stack.append(p)
         
         self.root = stack.pop()
+    
+    def buildt(sexpr):
+        stack = []
+        add = lambda node: node if node.data != "#" else None
+        
+        root = None
+        for tok in sexpr:
+            if tok != ")":
+                stack.append(Tree.TreeNode(tok))
+                continue
+            root_ = None
+            while stack[-1].data != "(":
+                node = stack.pop()
+                if root_ is None:
+                    root_ = node
+                    continue
+                right, root_ = root_, Tree.TreeNode(None)
+                root_.left_child, root_.right_sibling = add(node), add(right)
+            stack.pop()
+                
+            if not stack:
+                return root_
+            
+            assert root_
+            root = stack.pop()
+            root_.data = root.data
+            stack.append(root_)
+        
+        return root
 
     class TreeNode:
         def __init__(self, data):
